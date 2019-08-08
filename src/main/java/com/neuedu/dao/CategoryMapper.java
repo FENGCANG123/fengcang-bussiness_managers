@@ -45,4 +45,5 @@ public interface CategoryMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(@Param("category") Category category);
+    int exsitsCategoryname(@Param("name")String name);
 }

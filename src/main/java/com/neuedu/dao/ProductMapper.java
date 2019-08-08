@@ -45,5 +45,6 @@ public interface ProductMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(@Param("product")Product product);
+    int exsitsProductname(@Param("name")String name);
 
 }

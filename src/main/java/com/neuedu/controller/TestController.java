@@ -39,5 +39,10 @@ if (uploadFile!=null)
 }
         return "upload";
     }
+    @RequestMapping(value = "/error")
+    public String error()
+    {
+        return "error";
+    }
 }
 

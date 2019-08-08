@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
 import java.util.List;
 
 @Controller
@@ -50,7 +51,7 @@ public class UserController {
     @RequestMapping(value = "home",method = RequestMethod.GET)
     public String home()
     {
-        return "home";
+        return "home/home";
     }
     @RequestMapping(value = "find")
     public  String  findAll(HttpSession session){
@@ -116,4 +117,45 @@ public class UserController {
         System.out.println("注册失败");
         return "redirect:/user/find";
     }
+    @RequestMapping(value = "logout")
+    public String logout(HttpServletRequest request,HttpServletResponse response)
+    {
+        Enumeration em = request.getSession().getAttributeNames();
+        while(em.hasMoreElements()) {
+            request.getSession().removeAttribute(em.nextElement().toString());
+        }
+//        Cookie[]cookies=request.getCookies();
+//
+//        if (cookies!=null&cookies.length>0)
+//    {
+//        for (Cookie c:cookies
+//        ) {
+//            if(c.getName().equals("username"))
+//            {
+//                c.setMaxAge(0);
+//                c.setPath("/");
+//                response.addCookie(c);
+//            }
+//            if (c.getName().equals("password"))
+//            {
+//                c.setMaxAge(0);
+//                c.setPath("/");
+//                response.addCookie(c);
+//                System.out.println("======password");
+//            }
+//        }
+//    }
+        Cookie newCookie=new Cookie("username",null);
+        newCookie.setMaxAge(0);
+        newCookie.setPath("/");
+        response.addCookie(newCookie);
+        Cookie newCookie1=new Cookie("password",null);
+        newCookie1.setMaxAge(0);
+        newCookie1.setPath("/");
+        response.addCookie(newCookie1);
+
+
+        return "redirect:/user/login";
+    }
+
 }

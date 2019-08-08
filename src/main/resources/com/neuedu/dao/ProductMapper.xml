@@ -97,4 +97,7 @@
     update_time, sub_images, detail
     from neuedu_product
   </select>
+  <select id="exsitsProductname" parameterType="string" resultType="int">
+    select count(name) from neuedu_product where name=#{name}
+  </select>
 </mapper>
