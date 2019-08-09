@@ -53,4 +53,6 @@ public interface UserInfoMapper {
 
 
     UserInfo findByUsernameAndPassword(@Param("userinfo")UserInfo userInfo);
+
+
 }

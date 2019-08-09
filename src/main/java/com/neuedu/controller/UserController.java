@@ -1,6 +1,7 @@
 package com.neuedu.controller;
 
 import com.neuedu.consts.Const;
+import com.neuedu.exception.MyException;
 import com.neuedu.pojo.Category;
 import com.neuedu.pojo.UserInfo;
 import com.neuedu.service.impl.UserServiceImpl;
@@ -59,7 +60,7 @@ public class UserController {
         List<UserInfo> userInfoList=userService.findAll();
 
         session.setAttribute("userInfoList",userInfoList);
-        return "userinfolist";
+        return "userinfo/list";
     }
     @RequestMapping(value = "update/{id}",method = RequestMethod.GET)
     public  String  update(@PathVariable("id") Integer userId, HttpServletRequest request){
@@ -71,26 +72,28 @@ public class UserController {
             if (list.get(i).getId()==userId)
             {
                 request.setAttribute("updateuserinfo",list.get(i));
-                return "userinfoupdate";
+                return "userinfo/index";
             }
         }
-        return "userinfoupdate";
+        return "userinfo/index";
     }
     @RequestMapping(value = "update/{id}",method = RequestMethod.POST)
-    public String update(UserInfo updateuserinfo ,HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
+    public String update(UserInfo userinfo ,HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
     {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        System.out.println(updateuserinfo.getAnswer());
-        System.out.println(updateuserinfo.getRole());
-        int result=userService.updateByPrimaryKey(updateuserinfo);
+        System.out.println(userinfo.getAnswer());
+        System.out.println(userinfo.getRole());
+        int result=userService.updateByPrimaryKey(userinfo);
         if(result>0){
             //修改成功
+            request.getSession().removeAttribute("updateuserinfo");
 
             return "redirect:/user/find";
         }
 
-        return "userinfodate";
+
+        return "redirect:/user/find";
 
     }
     @RequestMapping(value = "delete/{id}")
@@ -102,7 +105,7 @@ public class UserController {
     @RequestMapping(value = "insert",method = RequestMethod.GET)
     public String insert()
     {
-        return "userinfoinsert";
+        return "userinfo/index";
     }
     @RequestMapping(value = "insert",method = RequestMethod.POST)
     public String insert(UserInfo userInfo,HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
@@ -124,35 +127,38 @@ public class UserController {
         while(em.hasMoreElements()) {
             request.getSession().removeAttribute(em.nextElement().toString());
         }
-//        Cookie[]cookies=request.getCookies();
-//
-//        if (cookies!=null&cookies.length>0)
-//    {
-//        for (Cookie c:cookies
-//        ) {
-//            if(c.getName().equals("username"))
-//            {
-//                c.setMaxAge(0);
-//                c.setPath("/");
-//                response.addCookie(c);
-//            }
-//            if (c.getName().equals("password"))
-//            {
-//                c.setMaxAge(0);
-//                c.setPath("/");
-//                response.addCookie(c);
-//                System.out.println("======password");
-//            }
-//        }
-//    }
-        Cookie newCookie=new Cookie("username",null);
-        newCookie.setMaxAge(0);
-        newCookie.setPath("/");
-        response.addCookie(newCookie);
-        Cookie newCookie1=new Cookie("password",null);
-        newCookie1.setMaxAge(0);
-        newCookie1.setPath("/");
-        response.addCookie(newCookie1);
+        Cookie[]cookies=request.getCookies();
+
+        if (cookies!=null&cookies.length>0)
+    {
+        for (Cookie c:cookies
+        ) {
+            if(c.getName().equals("username"))
+            {
+                c.setMaxAge(0);
+                c.setPath("/");
+                c.setValue(null);
+                System.out.println(c.getValue());
+                response.addCookie(c);
+            }
+            if (c.getName().equals("password"))
+            {
+                c.setMaxAge(0);
+                c.setPath("/");
+                c.setValue(null);
+                response.addCookie(c);
+                System.out.println("======password");
+            }
+        }
+    }
+//        Cookie newCookie=new Cookie("username",null);
+//        newCookie.setMaxAge(0);
+//        newCookie.setPath("/");
+//        response.addCookie(newCookie);
+//        Cookie newCookie1=new Cookie("password",null);
+//        newCookie1.setMaxAge(0);
+//        newCookie1.setPath("/");
+//        response.addCookie(newCookie1);
 
 
         return "redirect:/user/login";
