@@ -1,6 +1,7 @@
 package com.neuedu.controller;
 
 import com.neuedu.pojo.Category;
+import com.neuedu.pojo.PageContext;
 import com.neuedu.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -23,14 +24,17 @@ public class CategoryController {
     @Autowired
     ICategoryService categoryService;
 
-    @RequestMapping(value = "find")
-    public  String  findAll(HttpServletRequest request){
+    @RequestMapping(value = "find/{page}")
+    public  String  findAll(@PathVariable("page")int currentPage,HttpServletRequest request){
 
 
 
         List<Category> categoryList=categoryService.findAll();
-
+        PageContext pageContext=new PageContext(2,currentPage,categoryList);
+        pageContext.getCurrentlistBySum();
+        request.getSession().setAttribute("pageContext",pageContext);
         request.getSession().setAttribute("categorylist",categoryList);
+        request.getSession().setAttribute("currentPage",currentPage);
         return "category/list";
     }
 
@@ -58,8 +62,12 @@ public class CategoryController {
 
        if(count>0){
            //修改成功
+           System.out.println("修改成功");
+           System.out.println(category.getName());
            request.removeAttribute("updatecategory");
-           return "redirect:/user/category/find";
+           int page=(int)request.getSession().getAttribute("currentPage");
+           String url="redirect:/user/category/find/"+page;
+           return url;
        }
 
         return "categoryupdate";
@@ -68,7 +76,7 @@ public class CategoryController {
     public String delet(@PathVariable("id") Integer categoryId)
     {
         int result = categoryService.deleteByPrimaryKey(categoryId);
-        return "redirect:/user/category/find";
+        return "redirect:/user/category/find/0";
     }
     @RequestMapping(value = "insert",method = RequestMethod.GET)
     public String insert(HttpServletRequest request)
@@ -84,7 +92,9 @@ public class CategoryController {
 
         System.out.println(category.getName());
         categoryService.insert(category);
-        return "redirect:/user/category/find";
+        int page=(int)request.getSession().getAttribute("currentPage");
+        String url="redirect:/user/category/find/"+page;
+        return url;
     }
 
 

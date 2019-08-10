@@ -72,10 +72,10 @@
                             <select name="categoryId" class="form-control">
                                 <#list categorylist as category>
                                     <option value="${category.id}"
-                                            <#if (updateProduct.categoryId)?? || updateProduct.categoryId == category.id>
+                                            <#if (updateProduct.categoryId)?? && updateProduct.categoryId == category.id>
                                                 selected
                                             </#if>
-                                        >${category.name}
+                                    >${category.name}
                                     </option>
                                 </#list>
                             </select>

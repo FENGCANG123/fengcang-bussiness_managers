@@ -38,6 +38,7 @@
                                 </#list>
                             </select>
                         </div>
+                        <input  type="text" name="id" value="${(updatecategory.id)!''}">
                         <button type="submit" class="btn btn-default">提交</button>
                     </form>
                 </div>

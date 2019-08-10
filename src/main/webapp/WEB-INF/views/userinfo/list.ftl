@@ -30,7 +30,7 @@
                         </thead>
                         <tbody>
 
-                        <#list userInfoList as userinfo>
+                        <#list pageContext.getCurrentlist() as userinfo>
                         <tr>
                             <th>${userinfo.id}</th>
                             <th>${userinfo.username}</th>
@@ -53,24 +53,24 @@
             <#--分页-->
                 <div class="col-md-12 column">
                     <ul class="pagination pull-right">
-                    <#if currentPage lte 1>
+                    <#if currentPage lte 0>
                         <li class="disabled"><a href="#">上一页</a></li>
                     <#else>
-                        <li><a href="/sell/seller/order/list?page=${currentPage - 1}&size=${size}">上一页</a></li>
+                        <li><a href="/user/find/${currentPage - 1}">上一页</a></li>
                     </#if>
 
-                    <#list 1..productInfoPage.getTotalPages() as index>
+                    <#list pageContext.getPageList() as index>
                         <#if currentPage == index>
-                            <li class="disabled"><a href="#">${index}</a></li>
+                            <li class="disabled"><a href="#">${index+1}</a></li>
                         <#else>
-                            <li><a href="/sell/seller/order/list?page=${index}&size=${size}">${index}</a></li>
+                            <li><a href="/user/find/${index}">${index+1}</a></li>
                         </#if>
                     </#list>
 
-                    <#if currentPage gte productInfoPage.getTotalPages()>
+                    <#if currentPage gte pageContext.getTotalPages()-1>
                         <li class="disabled"><a href="#">下一页</a></li>
                     <#else>
-                        <li><a href="/sell/seller/order/list?page=${currentPage + 1}&size=${size}">下一页</a></li>
+                        <li><a href="/user/find/${currentPage + 1}">下一页</a></li>
                     </#if>
                     </ul>
                 </div>

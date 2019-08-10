@@ -7,7 +7,8 @@ public class MyException extends RuntimeException{
     public MyException(String msg, String director)
     {
 
-        super(msg);this.director=director;
+        super(msg);
+        this.director=director;
         System.out.println("gouzaochenggong");
     }
     public String getDirector() {

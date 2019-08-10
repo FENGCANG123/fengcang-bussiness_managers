@@ -41,7 +41,7 @@ public class CategoryServiceImpl implements ICategoryService {
         {
             throw new MyException("类名已存在","");
         }
-        return categoryMapper.updateByPrimaryKey(category);
+        return categoryMapper.updateByPrimaryKey(record);
     }
 
     @Override

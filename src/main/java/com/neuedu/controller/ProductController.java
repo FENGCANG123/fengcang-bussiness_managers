@@ -1,6 +1,7 @@
 package com.neuedu.controller;
 
 import com.neuedu.pojo.Category;
+import com.neuedu.pojo.PageContext;
 import com.neuedu.pojo.Product;
 import com.neuedu.service.impl.CategoryServiceImpl;
 import com.neuedu.service.impl.ProductServiceImpl;
@@ -29,11 +30,15 @@ public class ProductController {
     CategoryServiceImpl categoryService;
     @Autowired
     ProductServiceImpl productService;
-    @RequestMapping(value = "find")
-    public String findAll(HttpSession session)
+    @RequestMapping(value = "find/{page}")
+    public String findAll(@PathVariable("page")int currentPage,HttpSession session)
     {
         List<Product> productList=productService.selectAll();
+        PageContext pageContext=new PageContext(2,currentPage,productList);
+        productList=pageContext.getCurrentlistBySum();
+        session.setAttribute("pageContext",pageContext);
         session.setAttribute("productlist",productList);
+        session.setAttribute("currentPage",currentPage);
         return "product/list";
     }
     @RequestMapping(value = "update/{id}",method = RequestMethod.GET)
@@ -136,9 +141,12 @@ public String update(@PathVariable("id") Integer productId, HttpServletRequest r
         int result=productService.updateByPrimaryKey(updateProduct);
         if(result>0){
             //修改成功
+            System.out.println("================="+updateProduct.getCategoryId());
             request.getSession().removeAttribute("updateProduct");
             request.getSession().removeAttribute("newSubImageslist");
-            return "redirect:/user/product/find";
+            int page=(int)request.getSession().getAttribute("currentPage");
+            String url="redirect:/user/product/find/"+page;
+            return url;
         }
 
         return "productupdate";
@@ -148,7 +156,7 @@ public String update(@PathVariable("id") Integer productId, HttpServletRequest r
     private String delet(@PathVariable("id") Integer productId)
     {
         int result = productService.deleteByPrimaryKey(productId);
-        return "redirect:/user/product/find";
+        return "redirect:/user/product/find/0";
     }
     @RequestMapping(value = "insert",method = RequestMethod.GET)
     public String insert(HttpServletRequest request)
@@ -201,10 +209,12 @@ public String update(@PathVariable("id") Integer productId, HttpServletRequest r
         product.setSubImages(str.substring(0,str.length()-1));
             int result = productService.insert(product);
             if (result > 0) {
-                return "redirect:/user/product/find";
+                int page=(int)request.getSession().getAttribute("currentPage");
+                String url="redirect:/user/product/find/"+page;
+                return url;
             }
             System.out.println("注册失败");
-            return "redirect:/user/product/find";
+            return "redirect:/user/product/find/0";
 
     }
     @RequestMapping(value = "sub/{id}",method = RequestMethod.GET)
@@ -338,11 +348,13 @@ public String update(@PathVariable("id") Integer productId, HttpServletRequest r
                     product.setStatus(0);
                     productService.updateByPrimaryKey(product);
                 }
-                return "redirect:/user/product/find";
+                int page=(int)request.getSession().getAttribute("currentPage");
+                String url="redirect:/user/product/find/"+page;
+                return url;
             }
         }
 
-        return "redirect:/user/product/find";
+        return "redirect:/user/product/find/0";
     }
 
 

@@ -43,7 +43,11 @@ public class ProductServiceImpl implements IProductService {
         {
             throw new MyException("商品名已存在","");
         }
-        return productMapper.updateByPrimaryKey(record);
+        System.out.println("service==================="+record.getCategoryId());
+
+         int r= productMapper.updateByPrimaryKey(record);
+        System.out.println(r);
+        return r;
     }
 
     @Override

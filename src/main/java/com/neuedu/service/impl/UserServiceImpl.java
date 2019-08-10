@@ -4,6 +4,7 @@ import com.neuedu.dao.UserInfoMapper;
 import com.neuedu.exception.MyException;
 import com.neuedu.pojo.UserInfo;
 import com.neuedu.service.IUserService;
+import com.neuedu.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,11 @@ public class UserServiceImpl implements IUserService {
     UserInfoMapper userInfoMapper;
     @Override
     public UserInfo login(UserInfo userInfo) throws MyException {
-        if (userInfo==null||userInfo.getUsername()==null||userInfo.getUsername().equals(""))
+        if (userInfo==null)
+        {
+            throw new MyException("用户信息不能为空","login");
+        }
+        if (userInfo.getUsername()==null||userInfo.getUsername().equals(""))
         {
             throw new MyException("用户名不能为空","login");
         }
@@ -26,6 +31,7 @@ public class UserServiceImpl implements IUserService {
         {
             throw new MyException("用户不存在","login");
         }
+
         UserInfo userInfo1=userInfoMapper.findByUsernameAndPassword(userInfo);
         if(userInfo1==null)
         {
@@ -76,6 +82,11 @@ public class UserServiceImpl implements IUserService {
         if (record.getRole()==null)
         {
             record.setRole(1);
+        }
+        String password=record.getPassword();
+        if (password.length()!=32)
+        {
+            record.setPassword(MD5Utils.getMD5Code(password));
         }
         UserInfo userInfo=userInfoMapper.selectByPrimaryKey(record.getId());
         int result=userInfoMapper.exsitsUsername(record.getUsername());

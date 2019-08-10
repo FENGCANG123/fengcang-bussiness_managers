@@ -21,12 +21,12 @@
                             <th>父类</th>
                             <th>创建时间</th>
                             <th>修改时间</th>
-                            <th>操作</th>
+                            <th colspan="2">操作</th>
                         </tr>
                         </thead>
                         <tbody>
 
-                        <#list categorylist as category>
+                        <#list pageContext.getCurrentlist() as category>
                         <tr>
                             <td>${category.id}</td>
                             <td>${category.name}</td>
@@ -40,6 +40,30 @@
                         </#list>
                         </tbody>
                     </table>
+                </div>
+                <#--分页-->
+                <div class="col-md-12 column">
+                    <ul class="pagination pull-right">
+                        <#if currentPage lte 0>
+                            <li class="disabled"><a href="#">上一页</a></li>
+                        <#else>
+                            <li><a href="/user/category/find/${currentPage - 1}">上一页</a></li>
+                        </#if>
+
+                        <#list pageContext.getPageList() as index>
+                            <#if currentPage == index>
+                                <li class="disabled"><a href="#">${index+1}</a></li>
+                            <#else>
+                                <li><a href="/user/category/find/${index}">${index+1}</a></li>
+                            </#if>
+                        </#list>
+
+                        <#if currentPage gte pageContext.getTotalPages()-1>
+                            <li class="disabled"><a href="#">下一页</a></li>
+                        <#else>
+                            <li><a href="/user/category/find/${currentPage + 1}">下一页</a></li>
+                        </#if>
+                    </ul>
                 </div>
             </div>
         </div>

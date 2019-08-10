@@ -96,4 +96,5 @@
   <select id="findByUsernameAndPassword" parameterType="com.neuedu.pojo.UserInfo" resultType="com.neuedu.pojo.UserInfo">
         select * from neuedu_user where username=#{userinfo.username}and password=#{userinfo.password}
     </select>
+
 </mapper>

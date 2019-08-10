@@ -3,8 +3,10 @@ package com.neuedu.controller;
 import com.neuedu.consts.Const;
 import com.neuedu.exception.MyException;
 import com.neuedu.pojo.Category;
+import com.neuedu.pojo.PageContext;
 import com.neuedu.pojo.UserInfo;
 import com.neuedu.service.impl.UserServiceImpl;
+import com.neuedu.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +33,8 @@ public class UserController {
     }
     @RequestMapping(value = "login",method = RequestMethod.POST)
     public  String login(UserInfo userInfo, HttpServletResponse response, HttpServletRequest request)
-    {
+    {   String s=userInfo.getPassword();
+        userInfo.setPassword(MD5Utils.getMD5Code(s));
         UserInfo loginuserInfo=userService.login(userInfo);
 
        HttpSession session= request.getSession();
@@ -54,12 +57,23 @@ public class UserController {
     {
         return "home/home";
     }
-    @RequestMapping(value = "find")
-    public  String  findAll(HttpSession session){
+
+
+
+
+
+    @RequestMapping(value = "find/{page}")
+    public  String  findAll(@PathVariable("page")int currentPage, HttpSession session){
+
 
         List<UserInfo> userInfoList=userService.findAll();
+        PageContext pageContext=new PageContext(2,currentPage,userInfoList);
 
+
+        userInfoList=pageContext.getCurrentlistBySum();
+        session.setAttribute("pageContext",pageContext);
         session.setAttribute("userInfoList",userInfoList);
+        session.setAttribute("currentPage",currentPage);
         return "userinfo/list";
     }
     @RequestMapping(value = "update/{id}",method = RequestMethod.GET)
@@ -84,23 +98,25 @@ public class UserController {
         response.setContentType("text/html;charset=UTF-8");
         System.out.println(userinfo.getAnswer());
         System.out.println(userinfo.getRole());
+        int page=(int)request.getSession().getAttribute("currentPage");
+        String url="redirect:/user/find/"+page;
         int result=userService.updateByPrimaryKey(userinfo);
         if(result>0){
             //修改成功
             request.getSession().removeAttribute("updateuserinfo");
 
-            return "redirect:/user/find";
+            return url;
         }
 
 
-        return "redirect:/user/find";
+        return url;
 
     }
     @RequestMapping(value = "delete/{id}")
     private String delet(@PathVariable("id") Integer categoryId)
     {
         int result = userService.deleteByPrimaryKey(categoryId);
-        return "redirect:/user/find";
+        return "redirect:/user/find/0";
     }
     @RequestMapping(value = "insert",method = RequestMethod.GET)
     public String insert()
@@ -111,14 +127,16 @@ public class UserController {
     public String insert(UserInfo userInfo,HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-
+        int page=(int)request.getSession().getAttribute("currentPage");
+        String url="redirect:/user/find/"+page;
 
         int result=userService.insert(userInfo);
         if (result>0) {
-            return "redirect:/user/find";
+
+            return url;
         }
         System.out.println("注册失败");
-        return "redirect:/user/find";
+        return url;
     }
     @RequestMapping(value = "logout")
     public String logout(HttpServletRequest request,HttpServletResponse response)
@@ -136,16 +154,13 @@ public class UserController {
             if(c.getName().equals("username"))
             {
                 c.setMaxAge(0);
-                c.setPath("/");
-                c.setValue(null);
-                System.out.println(c.getValue());
+
                 response.addCookie(c);
             }
             if (c.getName().equals("password"))
             {
                 c.setMaxAge(0);
-                c.setPath("/");
-                c.setValue(null);
+
                 response.addCookie(c);
                 System.out.println("======password");
             }

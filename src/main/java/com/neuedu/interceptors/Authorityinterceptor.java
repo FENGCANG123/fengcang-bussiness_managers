@@ -3,6 +3,7 @@ package com.neuedu.interceptors;
 import com.neuedu.consts.Const;
 import com.neuedu.pojo.UserInfo;
 import com.neuedu.service.impl.UserServiceImpl;
+import com.neuedu.utils.MD5Utils;
 import org.omg.CORBA.*;
 import org.omg.PortableInterceptor.Interceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,12 @@ public class Authorityinterceptor implements HandlerInterceptor {
         {
 
             UserInfo userInfo1=new UserInfo();
-            userInfo1.setUsername(username);
+
+            String s=password;
+            System.out.println(username);
+            System.out.println(password);
             userInfo1.setPassword(password);
+            userInfo1.setUsername(username);
             UserInfo userinfo=userService.login(userInfo1);
             if (userinfo!=null)
             {
