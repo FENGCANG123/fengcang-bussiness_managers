@@ -32,7 +32,8 @@ public class ProductController {
     ProductServiceImpl productService;
     @RequestMapping(value = "find/{page}")
     public String findAll(@PathVariable("page")int currentPage,HttpSession session)
-    {
+    { List<Category> categoryList=categoryService.findAll();
+        session.setAttribute("categorylist",categoryList);
         List<Product> productList=productService.selectAll();
         PageContext pageContext=new PageContext(2,currentPage,productList);
         productList=pageContext.getCurrentlistBySum();
@@ -82,7 +83,7 @@ public String update(@PathVariable("id") Integer productId, HttpServletRequest r
             String fileName=mainpicture.getOriginalFilename();
             String fileextendname=fileName.substring(fileName.lastIndexOf("."));
             String newFileName=uuid+fileextendname;
-            File file=new File("D:\\upload");
+            File file=new File("/neuedu");
             File newFile=new File(file,newFileName);
             try {
                 mainpicture.transferTo(newFile);
@@ -114,7 +115,7 @@ public String update(@PathVariable("id") Integer productId, HttpServletRequest r
                 String fileName=uploadFile.getOriginalFilename();
                 String fileextendname=fileName.substring(fileName.lastIndexOf("."));
                 String newFileName=uuid+fileextendname;
-                File file=new File("D:\\upload");
+                File file=new File("/neuedu");
                 File newFile=new File(file,newFileName);
                 try {
                     uploadFile.transferTo(newFile);
@@ -136,8 +137,9 @@ public String update(@PathVariable("id") Integer productId, HttpServletRequest r
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
+            str=str.substring(0,str.length()-1);
         }
-        updateProduct.setSubImages(str.substring(0,str.length()-1));
+        updateProduct.setSubImages(str);
         int result=productService.updateByPrimaryKey(updateProduct);
         if(result>0){
             //修改成功
@@ -176,7 +178,7 @@ public String update(@PathVariable("id") Integer productId, HttpServletRequest r
             String fileName = mainpicture.getOriginalFilename();
             String fileextendname = fileName.substring(fileName.lastIndexOf("."));
             String newFileName = uuid + fileextendname;
-            File file = new File("D:\\upload");
+            File file = new File("/neuedu");
             File newFile = new File(file, newFileName);
             try {
                 mainpicture.transferTo(newFile);
@@ -205,8 +207,12 @@ public String update(@PathVariable("id") Integer productId, HttpServletRequest r
                 }
                 str = str + newFileName + ",";
             }
+//            product.setSubImages(str.substring(0, str.length() - 1));
+            str=str.substring(0,str.length()-1);
         }
-        product.setSubImages(str.substring(0,str.length()-1));
+
+         product.setSubImages(str);
+
             int result = productService.insert(product);
             if (result > 0) {
                 int page=(int)request.getSession().getAttribute("currentPage");
@@ -357,5 +363,8 @@ public String update(@PathVariable("id") Integer productId, HttpServletRequest r
         return "redirect:/user/product/find/0";
     }
 
-
+    public static void main(String[] args) {
+        String str="123456789";
+        System.out.println(str.substring(0,5));
+    }
 }

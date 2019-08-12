@@ -42,8 +42,8 @@
                             <th>${userinfo.role}</th>
                             <td>${userinfo.createTime?string('yyyy-MM-dd HH:mm:ss')}</td>
                             <td>${userinfo.updateTime?string('yyyy-MM-dd HH:mm:ss')}</td>
-                            <td><a href="/user/update/${userinfo.id}">修改</a></td>
-                            <td><a href="/user/delete/${userinfo.id}" onclick='return confirm("确定要删除吗?")'>删除</a></td>
+                            <td><a href="/business/user/update/${userinfo.id}">修改</a></td>
+                            <td><a href="/business/user/delete/${userinfo.id}" onclick='return confirm("确定要删除吗?")'>删除</a></td>
                         </tr>
                         </#list>
                         </tbody>
@@ -56,21 +56,21 @@
                     <#if currentPage lte 0>
                         <li class="disabled"><a href="#">上一页</a></li>
                     <#else>
-                        <li><a href="/user/find/${currentPage - 1}">上一页</a></li>
+                        <li><a href="/business/user/find/${currentPage - 1}">上一页</a></li>
                     </#if>
 
                     <#list pageContext.getPageList() as index>
                         <#if currentPage == index>
                             <li class="disabled"><a href="#">${index+1}</a></li>
                         <#else>
-                            <li><a href="/user/find/${index}">${index+1}</a></li>
+                            <li><a href="/business/user/find/${index}">${index+1}</a></li>
                         </#if>
                     </#list>
 
                     <#if currentPage gte pageContext.getTotalPages()-1>
                         <li class="disabled"><a href="#">下一页</a></li>
                     <#else>
-                        <li><a href="/user/find/${currentPage + 1}">下一页</a></li>
+                        <li><a href="/business/user/find/${currentPage + 1}">下一页</a></li>
                     </#if>
                     </ul>
                 </div>

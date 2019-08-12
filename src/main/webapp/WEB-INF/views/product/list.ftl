@@ -37,18 +37,22 @@
                             <td>${productInfo.price}</td>
                             <td>${productInfo.stock}</td>
                             <td>${productInfo.subtitle}</td>
-                            <td>${productInfo.categoryId}</td>
+                            <#list categorylist as parentcategory>
+                                <#if productInfo.categoryId=parentcategory.id>
+                                    <td>${parentcategory.name}</td>
+                                </#if>
+                            </#list>
                             <td>${productInfo.createTime?string('yyyy-MM-dd HH:mm:ss')}</td>
                             <td>${productInfo.updateTime?string('yyyy-MM-dd HH:mm:ss')}</td>
-                            <td><a href="/user/product/update/${productInfo.id}">修改</a></td>
+                            <td><a href="/business/user/product/update/${productInfo.id}">修改</a></td>
                             <td>
                                 <#if productInfo.getStatus() == 0>
-                                    <a href="/user/product/onSale/${productInfo.id}">下架</a>
+                                    <a href="/business/user/product/onSale/${productInfo.id}">下架</a>
                                 <#else>
-                                    <a href="/user/product/onSale/${productInfo.id}">上架</a>
+                                    <a href="/business/user/product/onSale/${productInfo.id}">上架</a>
                                 </#if>
                             </td>
-                            <td><a href="/user/product/delete/${productInfo.id}" onclick='return confirm("确定要删除吗?")'>删除</a></td>
+                            <td><a href="/business/user/product/delete/${productInfo.id}" onclick='return confirm("确定要删除吗?")'>删除</a></td>
                         </tr>
                         </#list>
                         </tbody>
@@ -61,21 +65,21 @@
                         <#if currentPage lte 0>
                             <li class="disabled"><a href="#">上一页</a></li>
                         <#else>
-                            <li><a href="/user/product/find/${currentPage - 1}">上一页</a></li>
+                            <li><a href="/business/user/product/find/${currentPage - 1}">上一页</a></li>
                         </#if>
 
                         <#list pageContext.getPageList() as index>
                             <#if currentPage == index>
                                 <li class="disabled"><a href="#">${index+1}</a></li>
                             <#else>
-                                <li><a href="/user/product/find/${index}">${index+1}</a></li>
+                                <li><a href="/business/user/product/find/${index}">${index+1}</a></li>
                             </#if>
                         </#list>
 
                         <#if currentPage gte pageContext.getTotalPages()-1>
                             <li class="disabled"><a href="#">下一页</a></li>
                         <#else>
-                            <li><a href="/user/product/find/${currentPage + 1}">下一页</a></li>
+                            <li><a href="/business/user/product/find/${currentPage + 1}">下一页</a></li>
                         </#if>
                     </ul>
                 </div>

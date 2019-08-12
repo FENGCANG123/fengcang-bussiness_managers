@@ -17,7 +17,7 @@
                         <tr>
                             <th>类目id</th>
                             <th>名字</th>
-                            <th>type</th>
+                            <th>状态</th>
                             <th>父类</th>
                             <th>创建时间</th>
                             <th>修改时间</th>
@@ -31,11 +31,15 @@
                             <td>${category.id}</td>
                             <td>${category.name}</td>
                             <td>${category.status}</td>
-                            <td>${category.parentId}</td>
+                            <#list categorylist as parentcategory>
+                                <#if category.parentId=parentcategory.id>
+                                    <td>${parentcategory.name}</td>
+                                </#if>
+                            </#list>
                             <td>${category.createTime?string('yyyy-MM-dd HH:mm:ss')}</td>
                             <td>${category.updateTime?string('yyyy-MM-dd HH:mm:ss')}</td>
-                            <td><a href="/user/category/update/${category.id}">修改</a></td>
-                            <td><a href="/user/category/delete/${category.id}" onclick='return confirm("确定要删除吗?")'>删除</a></td>
+                            <td><a href="/business/user/category/update/${category.id}">修改</a></td>
+                            <td><a href="/business/user/category/delete/${category.id}" onclick='return confirm("确定要删除吗?")'>删除</a></td>
                         </tr>
                         </#list>
                         </tbody>
@@ -47,21 +51,21 @@
                         <#if currentPage lte 0>
                             <li class="disabled"><a href="#">上一页</a></li>
                         <#else>
-                            <li><a href="/user/category/find/${currentPage - 1}">上一页</a></li>
+                            <li><a href="/business/user/category/find/${currentPage - 1}">上一页</a></li>
                         </#if>
 
                         <#list pageContext.getPageList() as index>
                             <#if currentPage == index>
                                 <li class="disabled"><a href="#">${index+1}</a></li>
                             <#else>
-                                <li><a href="/user/category/find/${index}">${index+1}</a></li>
+                                <li><a href="/business/user/category/find/${index}">${index+1}</a></li>
                             </#if>
                         </#list>
 
                         <#if currentPage gte pageContext.getTotalPages()-1>
                             <li class="disabled"><a href="#">下一页</a></li>
                         <#else>
-                            <li><a href="/user/category/find/${currentPage + 1}">下一页</a></li>
+                            <li><a href="/business/user/category/find/${currentPage + 1}">下一页</a></li>
                         </#if>
                     </ul>
                 </div>
