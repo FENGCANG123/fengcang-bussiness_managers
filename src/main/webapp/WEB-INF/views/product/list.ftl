@@ -33,7 +33,7 @@
                         <tr>
                             <td>${productInfo.id}</td>
                             <td>${productInfo.name}</td>
-                            <td><img height="100" src="http://img.neuedu.com/${productInfo.mainImage}" alt="http://img.neuedu.com/${productInfo.mainImage}"></td>
+                            <td><img height="100" src="http://47.96.225.221/${productInfo.mainImage}" alt="http://47.96.225.221/${productInfo.mainImage}"></td>
                             <td>${productInfo.price}</td>
                             <td>${productInfo.stock}</td>
                             <td>${productInfo.subtitle}</td>

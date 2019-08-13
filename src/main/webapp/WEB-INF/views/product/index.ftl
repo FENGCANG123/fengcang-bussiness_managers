@@ -35,7 +35,7 @@
                                 <input id="input-id" type="file"  name="mainpicture" multiple>
                                 <p class="help-block">支持jpg、jpeg、png、gif格式，大小不超过10M</p>
                             </div>
-                            <img height="90"  src="http://img.neuedu.com/${updateProduct.mainImage}" alt="请上传图片" >
+                            <img height="90"  src="http://47.96.225.221/${updateProduct.mainImage}" alt="请上传图片" >
                         </div>
                         <div class="form-group">
                             <label>附图</label>
@@ -45,8 +45,8 @@
                             </div>
                         </div>
                         <#list  newSubImageslist as image>
-                            <img height="90" src="http://img.neuedu.com/${image}" alt="http://img.neuedu.com/${image}">
-                            <a href="/user/product/deleteimage/${image}"onclick='return confirm("确定要删除吗?")'>x</a>
+                            <img height="90" src="http://47.96.225.221/${image}" alt="http://47.96.225.221/${image}">
+                            <a href="/business/user/product/deleteimage/${image}"onclick='return confirm("确定要删除吗?")'>x</a>
 
                         </#list>
 

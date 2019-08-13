@@ -66,7 +66,7 @@ public class Authorityinterceptor implements HandlerInterceptor {
         }
                  //不符合条件的给出提示信息，并转发到登录页面
                  request.setAttribute("msg", "您还没有登录，请先登录！");
-                 response.sendRedirect("/user/login");
+                 response.sendRedirect("/business/user/login");
                  return false;
     }
 
